@@ -34,7 +34,7 @@ these runs informed the roadmap but were not integrated under submission time co
 | 17 | within-turn stage-2 recalibration (p vs running max/mean of previous pauses' p — causal) | 1222 | 844 | Small consistent english gain. |
 | 18 | single GBM over ALL blocks (hand+mel+aux1+aux2+yin) replaces 4-model average | **1175** | 857 | LR/MLP heads were dragging the average. 3-seed bagged: identical. +stage-2 blend: **1159**. |
 | 19 | nested per-language head-weight selection (leave-one-fold-out) | 1209 | 857 | Weights unstable across folds — small-sample noise, not signal. |
-
+| 20 | guard v2 attempt (from 2nd human listening round: en__064 "hasn't started speaking" yet scored p=0.96) | 1260 | 868 | REJECTED, measured. en__064's pre-speech sound is spectrally speech-like (hf_ratio 0.38, 0.72s — likely background speech/TV bleed), so every relaxation of the thud guard that catches it also guards real one-word turn-ends (hi__060/68/84, en__043) and worsens both languages. Correct fix needs foreground/background separation — out of scope. Shipped guard stays v1. |
 **Why hindi is pinned at ~850:** the operating point is frozen by ~8 turns whose long holds
 score 0.82–0.94 across every model; human listening (hi__051, hi__036) finds no audible cue
 — the speaker just pauses mid-sentence with neutral prosody. This is lexical-completion
@@ -42,6 +42,9 @@ information (ASR is banned). English retains headroom (best honest config 1159 m
 aux/yin blocks; integrating them into predict.py (ship aux models + yin at inference) is the
 first thing we would do with one more day.
 
-**Where it still fails:** confident cue-less long holds (above); fast mid-pitch-range
-endings (phone numbers). The full second-round code (aux_vad.py, aux2.py, yin_tail.py)
-is reproducible and fold-safe.
+
+**Where it still fails:** confident cue-less long holds (hi__051 "normal pause", en__002);
+digit-group endings (en__030 phone number, confirmed by listening); background-speech
+pre-speech pauses (en__064); high-arousal speakers (hi__036, shouting — 3 of hindi's 8
+blockers, skews per-turn normalization). The full second-round code (aux_vad.py, aux2.py,
+yin_tail.py) is reproducible and fold-safe.
