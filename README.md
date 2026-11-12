@@ -13,6 +13,10 @@ python predict.py --data_dir <folder> --out predictions.csv
 `<folder>` must contain `labels.csv` and the `audio/` files it references
 (same schema as the handout). `eot_model.pkl` must sit next to `predict.py`.
 
+`eot_model.pkl` was saved with scikit-learn 1.7.2 and NumPy 2, and newer
+scikit-learn releases cannot load it, so `requirements.txt` pins that version.
+To use a different version, retrain first with `train_model.py`.
+
 ## Results (5-fold grouped out-of-fold, official scorer)
 
 | | silence baseline | this model |
