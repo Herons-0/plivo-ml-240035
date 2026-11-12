@@ -1,6 +1,9 @@
-numpy
+# eot_model.pkl was pickled with scikit-learn 1.7.2 on NumPy 2. Newer
+# scikit-learn releases cannot unpickle it (ModuleNotFoundError: '_loss'),
+# so keep this pin unless you retrain with train_model.py.
+scikit-learn==1.7.2
+numpy>=2
 scipy
 pandas
-scikit-learn
 soundfile
 matplotlib
